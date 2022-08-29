@@ -1,0 +1,6 @@
+<!-- docs/_sidebar.md -->
+
+* [<h1>Home</h1>](/)
+* [<h2>HTML & CSS</h2>](Block_1/README.md)
+* [<h2>A-Frame</h2>](Block_2/README.md)
+* [<h2>Javascript</h2>](Block_3/README.md)
