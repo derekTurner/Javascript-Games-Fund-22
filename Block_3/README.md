@@ -1,3 +1,3 @@
-# Block 1
+# Block 3
 
-HTML and CSS
+Using Babylon to create interactive scenes and games.
