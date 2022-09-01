@@ -8,4 +8,7 @@
 * [<h3>Examples</h3>](Block_2/section_1/Examples.md)
 * [<h3>Object Orientation</h3>](Block_2/section_2/section_2.md)
 * [<h3>Functional Programming</h3>](Block_2/section_3/section_3.md)
-* [<h3>Modern Javascript Constructs</h3>](Block_2/section_4/section_4.md) 
+* [<h3>Javascript Strings</h3>](Block_2/section_4/section_4_E6strings.md) 
+* [<h3>Javascript Arrays</h3>](Block_2/section_4/section_4_E6arrays.md) 
+* [<h3>Javascript Arrows</h3>](Block_2/section_4/section_4_E6arrows.md) 
+* [<h3>Javascript Destructure & Spread</h3>](Block_2/section_4/section_4_E6destructure.md) 
