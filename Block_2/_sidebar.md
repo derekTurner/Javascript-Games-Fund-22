@@ -15,3 +15,4 @@
 * [<h3>Javascript Arrows</h3>](Block_2/section_4/section_4_E6arrows.md) 
 * [<h3>Javascript Maps</h3>](Block_2/section_4/section_4_E6maps.md) 
 * [<h3>Javascript Modules</h3>](Block_2/section_4/section_4_E6modules.md) 
+* [<h3>Javascript Modules</h3>](Block_2/section_5/section_5_Promises.md) 
