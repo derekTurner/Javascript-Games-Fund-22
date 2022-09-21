@@ -1,6 +1,6 @@
 # Javascript Games Programming fundamentals
 
-![logo](JGF_badge.png)
+![logo](JGF_badge.png) 
 
 Javascript in the context of games utilising the BabylonJS framework.
 

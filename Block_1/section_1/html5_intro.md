@@ -133,7 +133,7 @@ Within the `<head>` tag, external files can bel linked. Javascript files are ide
     </head>
     <body>
         <h1>Change Location</h1>
-        <button onclick=myFunction()> Visit W3Schools </button>
+        <button onclick="myFunction();"> Visit W3Schools </button>
 
     </body>
 </html>
