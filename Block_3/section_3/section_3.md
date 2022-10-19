@@ -10,7 +10,7 @@ At the time of writing the current docker version is 4.11.1
 
 If you want to run a sample container or look to see what tutorial materials are provided for docker take a brief detour before continuing.
 
-## Running React with Docker
+## Running Babylon.js with Docker
 
 Docker is good for development and deployment.  The development environment works well with github and visual studio code.
 
