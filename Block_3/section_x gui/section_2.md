@@ -1,4 +1,4 @@
-# Section 2
+## Section 2  adding a button
 
 GUI try out
 
@@ -7,17 +7,12 @@ GUI try out
     width="100%" 
     scrolling="no" 
     title="Zdog trefoil" 
-    src="Block_1/section_2/trygui.html" 
+    src="Block_3/section_2/trygui.html" 
     frameborder="no" 
     loading="lazy" 
     allowtransparency="true" 
     allowfullscreen="true">
 </iframe>
-
-
-
-
-
 
 
 The end
