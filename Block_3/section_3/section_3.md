@@ -33,7 +33,7 @@ In the github browser, from the Add file button create a new file named **.docke
 
 Add the text:
 
-```json
+```JSON
 {
     "image": "node"
 }
