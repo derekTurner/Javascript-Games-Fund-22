@@ -130,6 +130,8 @@ When you have had a look around move back to the com.docker.devenvironments.code
 
 Returning to the development environment folder in the terminal you can now issue commands to install babylonjs.
 
+These will follow the steps outlined in chapter 2 of [Going the Distance with Babylon.js](https://www.packtpub.com/product/going-the-distance-with-babylonjs/9781801076586) by Josh Elster which is a recommended purchase.
+
 Create folders src, dist, public and assets.
 
 
@@ -310,6 +312,192 @@ Add a configuration file for eslint to the root folder of the repository named *
 node_modules
 dist
 ```
+### configure webpack
+
+Add three files to the root directory **webpack.dev.js**, **webpack.prod.js and **webpack.common.js**
+
+Add a new file to the src directory **index.js**
+
+Add a new file to the public directory **index.html** 
+
+Webpack will be used at build time to bundle the javascript for our application into the dist folder.  The js scripts from the src folder will be output to the dist folder and the applications entry point, index.js wil be injected into the index.html file in the public folder.
+
+During development, there is no bundling, the webpack server will build and cache output, rebuilding what is required as edits are made.A websocket connection to the browser is used to refresh the page.  Javascript sourdce maps will be emitted for debugging.
+
+The webpack.common.js will ensure through the CleanWebpack Plugin that any old source files are cleared out of the destination directory.  the HTMLWebpackPlugin will inject the start script reference into teh inex.html template.
+
+Edit **webpack.common.js** to read:
+
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const appDirectory = __dirname;
+```
+This does not use ES6 module syntax.
+
+The configuration requires an entry object to identify the script which will launch the app on the client which will be injected itno a `<script>` tag in the index.html page.
+
+The entry item needs to know what base paths to use for reading and writing files.
+
+An output object indicates where to emit packed results.
+
+Plugin instances are instantiated.
+
+Edit **webpack.common.js** adding:
+
+```javascript
+module.exports = {
+    entry: "./src/index.js",
+    output: {
+        filename: "js/babylonBundle.js",
+        path: path.resolve(appDirectory, "dist")
+    },
+    plugins: [
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.resolve(appDirectory, "public/index.html"),
+            inject: true
+        })
+    ]
+};
+```
+
+As a test of this code run in the terminal:
+
+>npx webpack --config webpack.common.js
+
+```code
+asset index.html 70 bytes [emitted]
+asset js/babylonBundle.js 0 bytes [emitted] [minimized] (name: main)
+./src/index.js 1 bytes [built] [code generated]
+
+WARNING in configuration
+The 'mode' option has not been set, webpack will fallback to 'production' for this value.
+Set 'mode' option to 'development' or 'production' to enable defaults for each environment.
+You can also set it to 'none' to disable any default behavior. Learn more: https://webpack.js.org/configuration/mode/
+
+webpack 5.74.0 compiled with 1 warning in 354 ms
+```
+This works but there is a warning about the lack of a mode option so still work to do in the webpack.common.js file.
+
+## asset loading
+
+Webpack will need to search through the source for javascript files.  This is achieved by adding a resolve object below the output. (Programmers using typescript should also inlude .ts in the extensions array, but I am working in javascript.)
+
+```javascript
+resolve: {
+      extensions: [".js"],
+      fallback: {
+          fs: false,
+          path: false,
+      },
+    },  
+```
+
+Next a module object includes a list of file extensions defined by a regular expression to identify modules.
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.(png|jpg|gif|env|glb|stl)$/i,
+            use: [
+                {
+                    loader: "url-loader",
+                    options: {
+                        limit: 8192,
+                    },
+                },
+            ],
+        },
+    ],
+},
+```
+
+### development and production
+
+The webpack.dev file wil configure the testing web server and send source maps inline with the scripts.
+
+**webpack.dev.js**
+```javascript
+const { merge } = require('webpack-merge');
+const common = require('./webpack.common.js');
+const path = require('path');
+
+const appDirectory = __dirname;
+const devConfig = {
+    mode: "development",
+    devtool: "inline-source-map",
+    devServer:  {
+        contentBase: path.resolve(appDirectory, "public"),
+        compress: true,
+        hot: true,
+        open: true,
+        publicPath: "/"
+    }
+};
+module.exports = merge(common, devConfig);
+```
+
+The production script does not need to configure a server so it is a bit simpler.
+
+**webpack.prod.js**
+```javascript
+const { merge } = require('webpack-merge');
+const common = require('./webpack.common.js');
+
+const prodConfig = {
+    mode: "production"
+};
+module.exports = merge(common, prodConfig);
+```
+
+Try a test:
+>npm run start
+
+
+
+Now a starter template can be added to public/index.html based on  the earlier example hello.html but with reference to cdn babylon  scripts removed.
+
+At this point things might go awry I need to try this!
+
+Add the top.js and bottom.js files to the public folder.
+
+Now try adding the index.js file to the src directory
+
+**index.js**
+```javscript
+var createScene = async function () {
+    const scene = new BABYLON.Scene(engine);
+    scene.debugLayer.show();
+
+    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0));
+
+    camera.attachControl(canvas, true);
+
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0));
+
+    light.intensity = 0.7;
+
+    const box = BABYLON.MeshBuilder.CreateBox("box", {});
+
+    box.position.y = 3;
+
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
+
+    sphere.position.y = 1;
+
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+
+    return scene;
+};
+
+```
+
+
+
+### synchronise github
 
 Virtual studio code adds an icon to indicate that the file type is recognised.
 
