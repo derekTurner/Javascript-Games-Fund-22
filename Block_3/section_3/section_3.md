@@ -381,6 +381,62 @@ webpack 5.74.0 compiled with 1 warning in 354 ms
 ```
 This works but there is a warning about the lack of a mode option so still work to do in the webpack.common.js file.
 
+Full listing of **webpack.common.js**
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const appDirectory = __dirname;
+
+module.exports = {
+    entry: "./src/index.js",
+    output: {
+        filename: "js/babylonBundle.js",
+        path: path.resolve(appDirectory, "dist")
+    },
+    resolve: {
+        extensions: [".ts", ".js"],
+        fallback: {
+            fs: false,
+            path: false,
+        },
+    },
+    module: {
+        rules: [
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
+            {
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
+                loader: "source-map-loader",
+                enforce: "pre",
+            },
+            {
+                test: /\.(png|jpg|gif|env|glb|stl)$/i,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+    plugins: [
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.resolve(appDirectory, "public/index.html"),
+            inject: true
+        })
+    ]
+};
+```
+
 ## asset loading
 
 Webpack will need to search through the source for javascript files.  This is achieved by adding a resolve object below the output. (Programmers using typescript should also inlude .ts in the extensions array, but I am working in javascript.)
@@ -398,26 +454,37 @@ resolve: {
 Next a module object includes a list of file extensions defined by a regular expression to identify modules.
 
 ```javascript
-module: {
-    rules: [
-        {
-            test: /\.(png|jpg|gif|env|glb|stl)$/i,
-            use: [
-                {
-                    loader: "url-loader",
-                    options: {
-                        limit: 8192,
-                    },
+    module: {
+        rules: [
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false,
                 },
-            ],
-        },
-    ],
-},
+            },
+            {
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
+                loader: "source-map-loader",
+                enforce: "pre",
+            },
+            {
+                test: /\.(png|jpg|gif|env|glb|stl)$/i,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 ```
 
 ### development and production
 
-The webpack.dev file wil configure the testing web server and send source maps inline with the scripts.
+The webpack.dev file will configure the testing web server and send source maps inline with the scripts.
 
 **webpack.dev.js**
 ```javascript
@@ -430,11 +497,9 @@ const devConfig = {
     mode: "development",
     devtool: "inline-source-map",
     devServer:  {
-        contentBase: path.resolve(appDirectory, "public"),
         compress: true,
         hot: true,
-        open: true,
-        publicPath: "/"
+        open: true
     }
 };
 module.exports = merge(common, devConfig);
@@ -456,46 +521,137 @@ module.exports = merge(common, prodConfig);
 Try a test:
 >npm run start
 
-
+### Loading a scene
 
 Now a starter template can be added to public/index.html based on  the earlier example hello.html but with reference to cdn babylon  scripts removed.
 
-At this point things might go awry I need to try this!
 
-Add the top.js and bottom.js files to the public folder.
+Add index.js file to the src directory
 
-Now try adding the index.js file to the src directory
-
-**index.js**
+**src/index.js**
 ```javscript
-var createScene = async function () {
-    const scene = new BABYLON.Scene(engine);
-    scene.debugLayer.show();
+import { Engine } from "@babylonjs/core/Engines/engine";
+import createStartScene from "./createStartScene";
+const CanvasName = "index-canvas";
 
-    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new BABYLON.Vector3(0, 0, 0));
+let canvas = document.createElement("canvas");
+canvas.id = CanvasName;
 
-    camera.attachControl(canvas, true);
+canvas.classList.add("renderCanvas");
+document.body.appendChild(canvas);
 
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0));
-
-    light.intensity = 0.7;
-
-    const box = BABYLON.MeshBuilder.CreateBox("box", {});
-
-    box.position.y = 3;
-
-    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-
-    sphere.position.y = 1;
-
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
-
-    return scene;
-};
-
+let eng = new Engine(canvas, true, null, true);
+let startScene = createStartScene(eng);
+eng.runRenderLoop(() => {
+    startScene.scene.render();
+});
 ```
 
+This has the code needed to create acanvas in the DOM and initialise a render loop based on a scene named startScene which is generated by a function imported from the module file **src/createStartScene.js**
 
+```javascript
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
+import { Scene } from "@babylonjs/core/scene"
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import "@babylonjs/core/Debug/debugLayer";
+import "@babylonjs/inspector";
+
+function createBox(scene){
+    let box = MeshBuilder.CreateBox("box", scene);
+    box.position.y = 3;
+    return box;
+}
+    
+function createLight(scene){
+    const light = new HemisphericLight("light", new Vector3(0, 1, 0),scene);
+    light.intensity = 0.7;
+    return light;
+}
+   
+function createSphere(scene){
+    let sphere = MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
+    sphere.position.y = 1;
+    return sphere;
+}
+   
+function createGround(scene){
+    let ground = MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    return ground;
+}
+  
+function createArcRotateCamera(scene){
+    let camAlpha = -Math.PI / 2,
+    camBeta  =  Math.PI / 2.5,
+    camDist  =  10,
+    camTarget = new Vector3(0, 0, 0); 
+    let camera = new ArcRotateCamera("camera1", camAlpha, camBeta, camDist, camTarget, scene);
+    camera.attachControl(true);
+    return camera;
+}
+
+export default function createStartScene(engine) {
+    let that = {};
+    let scene = that.scene = new Scene(engine);
+    scene.debugLayer.show();
+
+    let box = that.starbox = createBox(scene);
+    let light = that.light = createLight(scene);
+    let sphere = that.sphere = createSphere(scene);
+    let ground = that.ground = createGround(scene);
+    let camera = that.camera = createArcRotateCamera(scene);
+
+    return that;
+}
+
+```
+Note that when code elements are imported they can be referenced directly without the prefix BABYLON.
+
+To view the scene
+>npm run start
+
+```code
+> com.docker.devenvironments.code@1.0.0 start
+> npx webpack serve --config webpack.dev.js
+
+<i> [webpack-dev-server] Project is running at:
+<i> [webpack-dev-server] Loopback: http://localhost:8080/
+<i> [webpack-dev-server] Content not from webpack is served from '/com.docker.devenvironments.code/public' directory
+<i> [webpack-dev-middleware] wait until bundle finished: /
+asset js/babylonBundle.js 63.7 MiB [emitted] (name: main)
+asset index.html 647 bytes [emitted]
+runtime modules 27.3 KiB 12 modules
+modules by path ./node_modules/@babylonjs/core/ 9.25 MiB 1099 modules
+modules by path ./node_modules/@babylonjs/gui/ 1.04 MiB 110 modules
+modules by path ./node_modules/@babylonjs/materials/ 319 KiB 60 modules
+modules by path ./node_modules/@babylonjs/loaders/ 427 KiB 52 modules
+modules by path ./node_modules/@babylonjs/serializers/ 263 KiB 28 modules
+modules by path ./node_modules/webpack-dev-server/client/ 55.8 KiB 12 modules
+modules by path ./node_modules/webpack/hot/*.js 4.3 KiB 4 modules
+modules by path ./node_modules/html-entities/lib/*.js 81.3 KiB
+  ./node_modules/html-entities/lib/index.js 7.74 KiB [built] [code generated]
+  + 3 modules
+modules by path ./src/*.js 2.2 KiB
+  ./src/index.js 439 bytes [built] [code generated]
+  ./src/createStartScene.js 1.77 KiB [built] [code generated]
++ 4 modules
+webpack 5.74.0 compiled successfully in 15489 ms
+```
+
+The scene opens running on localhost port 8080:
+
+
+
+
+![startScene](startScene.png)
+
+Any changes to the scene code will now be on hot refresh.
+
+To close the webpack development server:
+
+>CTRL + C
 
 ### synchronise github
 
@@ -515,6 +671,5 @@ Synchronise the changes.
 
 Your code is now safely backed up on github.
 
-There is a bit more yet to do to get the application running!
----
+
 
