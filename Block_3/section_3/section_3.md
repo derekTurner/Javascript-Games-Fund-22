@@ -671,5 +671,146 @@ Synchronise the changes.
 
 Your code is now safely backed up on github.
 
+## Production Build
 
+Once a babylon project is complete it should be built to create a fast loading web page which an be mounted on any web server without the need for a node environment.
+
+This production build should be generated inside the `dist/` folder. 
+
+If this is a production build the debug layer will not be required so the imports for the inspector and the line to show the deug screen can be commented out (or removed).
+
+**createStartScene** without scene inspector.
+```javascript
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder"
+import { Vector3 } from "@babylonjs/core/Maths/math.vector"
+import { Scene } from "@babylonjs/core/scene"
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+// import "@babylonjs/core/Debug/debugLayer";
+// import "@babylonjs/inspector";
+
+function createBox(scene){
+    let box = MeshBuilder.CreateBox("box", scene);
+    box.position.y = 3;
+    return box;
+}
+    
+function createLight(scene){
+    const light = new HemisphericLight("light", new Vector3(0, 1, 0),scene);
+    light.intensity = 0.7;
+    return light;
+}
+   
+function createSphere(scene){
+    let sphere = MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
+    sphere.position.y = 1;
+    return sphere;
+}
+   
+function createGround(scene){
+    let ground = MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    return ground;
+}
+  
+function createArcRotateCamera(scene){
+    let camAlpha = -Math.PI / 2,
+    camBeta  =  Math.PI / 2.5,
+    camDist  =  10,
+    camTarget = new Vector3(0, 0, 0); 
+    let camera = new ArcRotateCamera("camera1", camAlpha, camBeta, camDist, camTarget, scene);
+    camera.attachControl(true);
+    return camera;
+}
+
+export default function createStartScene(engine) {
+    let that = {};
+    let scene = that.scene = new Scene(engine);
+    //scene.debugLayer.show();
+
+    let box = that.starbox = createBox(scene);
+    let light = that.light = createLight(scene);
+    let sphere = that.sphere = createSphere(scene);
+    let ground = that.ground = createGround(scene);
+    let camera = that.camera = createArcRotateCamera(scene);
+
+    return that;
+}
+
+```
+
+With the application closed but the development environment running enter
+
+> npm run build
+
+```code
+> com.docker.devenvironments.code@1.0.0 build
+> npx webpack --config webpack.prod.js
+
+asset js/babylonBundle.js 1020 KiB [emitted] [minimized] [big] (name: main)
+asset index.html 555 bytes [emitted]
+orphan modules 2.97 MiB [orphan] 246 modules
+./src/index.js + 246 modules 2.97 MiB [built] [code generated]
+
+WARNING in asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  js/babylonBundle.js (1020 KiB)
+
+WARNING in entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  main (1020 KiB)
+      js/babylonBundle.js
+
+
+WARNING in webpack performance recommendations: 
+You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
+For more info visit https://webpack.js.org/guides/code-splitting/
+
+webpack 5.74.0 compiled with 3 warnings in 5424 ms
+```
+
+Look into the dist folder.
+
+A new javascript bundle file babylonBundle.js has been created and this is injected into index.html.
+
+**index.html**
+```html
+<!doctype html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Babylon.js sample code</title><style>html,
+            body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }</style><script defer="defer" src="js/babylonBundle.js"></script></head><body></body></html>
+```
+
+To access the dist folder right click over the folder and download.
+
+![download](download.png)
+
+I have downloaded this as a file to the desktop. I can then upload this to any webserver, but to check its operation I have loaded it into visual studio code.  There is no node environment in use here.
+
+![dist folder downloaded](dist.png)
+
+Now running this in live server shows that it is a fully working production model.
+
+<iframe 
+    height="600" 
+    width="100%" 
+    scrolling="no" 
+    title="Zdog trefoil" 
+    src="Block_3/section_1b/dist/index.html" 
+    frameborder="no" 
+    loading="lazy" 
+    allowtransparency="true" 
+    allowfullscreen="true">
+</iframe>
 
