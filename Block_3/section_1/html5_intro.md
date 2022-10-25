@@ -16,7 +16,7 @@ The default image on the playground site is a sphere floating above a ground pla
 
 The createScene function is the interesting thing here, but it is not the complete code.  Playground adds in extra code behind the scenes.  If you want to edit code in visual studio code you will need to add in the necessary standard code around the createScene function and all of this will need to sit inside an HTML file.
 
-*hello.html
+**hello.html**
 ```html
 <!DOCTYPE html>
 <html>

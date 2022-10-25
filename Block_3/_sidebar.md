@@ -3,6 +3,7 @@
 * [<h1>Home</h1>](/)
 * [<h1>BabylonJS</h1>](/Block_3/README.md)
 * [<h3>Basics</h3>](Block_3/section_1/html5_intro.md)
+* [<h3>Refactor Basics</h3>](Block_3/section_1b/refactor.md)
 * [<h3>Setup Docker</h3>](Block_3/section_2/setup.md)
 * [<h3>Install babylonjs</h3>](Block_3/section_3/section_3.md)
 <!--
