@@ -1,10 +1,8 @@
-# Building scenes
-
-To get accustomed to Babyklon it is suggested to follow through the tutorial on [building a village](https://doc.babylonjs.com/features/introductionToFeatures/chap2).
-
-The village is built up in stages so it is useful to have scenes which can be switched between to see the development stages.
-
 ## Swapping Scenes.
+
+To work through examples and to follow tutorials in stages it will be useful to set up a range of scenes which can be switched in response to a button click.  
+
+At a later stage it will be useful to change scenes in response to the state of a game or application.
 
 Working locally (not on Docker) a simple way to switch from one scene to another is presented.  This uses HTML buttons which are outside the canvas.  In a subsequent section gui elements will be introduced into the canvas which can have the same effect.
 
