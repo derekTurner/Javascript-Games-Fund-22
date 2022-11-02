@@ -18,20 +18,13 @@ function createBox(scene) {
 }
 
 function createRoof(scene) {
-    let roof = BABYLON.MeshBuilder.CreateCylinder("roof",{diameter:1.3, tessellation: 3},scene);
+    let roof = BABYLON.MeshBuilder.CreateCylinder("roof",{diameter:1.3,height: 1.2, tessellation: 3},scene);
     roof.scaling = new BABYLON.Vector3(0.75, 1, 1);
       roof.position = new BABYLON.Vector3(0.0, 1.2, 0.0);
       roof.rotation.z = Math.PI / 2;
       return roof;
 }
-// Materials
 
-// Texturing
-
-//const rooofMat = new BABYLON.StandardMaterial("roofmat");
-
-
-  //    groundmat.diffusecolor = new BABYLON.Color3.Gray();
 
 function createLight(scene) {
   const light = new BABYLON.HemisphericLight(

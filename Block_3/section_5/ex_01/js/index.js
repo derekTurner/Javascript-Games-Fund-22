@@ -16,24 +16,24 @@ console.log("ex_01");
 
 
 // Simple HTML gui
-function loadLeft(){
 
-    scene = scenes_arr[0].scene;
-    console.log("Left");
+function showScene(index){
+  scene = scenes_arr[index].scene;
+}
+
+function show(){
+
   }
   
-  function loadRight(){
-      
-    scene = scenes_arr[1].scene;
-      console.log("Right");
-  }
-  
-  document.getElementById("left").addEventListener('click', loadLeft, {passive: true});
-  document.getElementById("right").addEventListener('click', loadRight, {passive: true});
+  document.getElementById("s1").addEventListener('click', showScene(0) ,{passive: true});
+  document.getElementById("s2").addEventListener('click', showScene(1), {passive: true});
+  document.getElementById("s3").addEventListener('click', showScene(0) ,{passive: true});
+  document.getElementById("s4").addEventListener('click', showScene(1), {passive: true});
 
 // Start engine and render
 let eng = new BABYLON.Engine(canvas, true, null, true);
 scenes_arr.push(createScene1(eng));
+
 scenes_arr.push(createScene2(eng));
 let scene = scenes_arr[0].scene;
 eng.runRenderLoop(() => {
