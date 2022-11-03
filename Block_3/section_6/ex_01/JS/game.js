@@ -126,7 +126,6 @@ box.animations.push (xRotation);
 box.animations.push (yRotation);
 box.animations.push (v3scaling);
 
-
 scene.beginAnimation(box, 0, 2 * frameRate, true);
 
     return scene;
