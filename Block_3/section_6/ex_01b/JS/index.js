@@ -1,7 +1,7 @@
 import createScene1 from "./createScene1.js";
 import createScene2 from "./createScene2.js";
 
-const CanvasName = "index-canvas";
+const CanvasName = "renderCanvas";
 
 let canvas = document.createElement("canvas");
 canvas.id = CanvasName;
