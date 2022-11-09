@@ -12,7 +12,7 @@ document.body.appendChild(canvas);
 var sceneIndex = 0;
 var scenes_arr = [];
 
-console.log("ex_01");
+console.log("ex_02");
 
 
 // Simple HTML gui
