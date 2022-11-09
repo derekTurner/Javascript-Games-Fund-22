@@ -17,7 +17,12 @@ animation curve editor https://doc.babylonjs.com/toolsAndResources/inspector/ani
 To Do
 * Add distribution code to dist directory in S3 and link to this.
 * Complete village scene now have 4 scene views
-* add multiple scenes to frame based animation
+* add multiple scenes to frame based 
+## Mesh 
+
+## Animation
+
+## Gui
 
 https://www.tutorialspoint.com/babylonjs/babylonjs_animations.htm
 
