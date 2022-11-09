@@ -3,6 +3,10 @@ const frameRate = 30;
 function createBox(scene) {
     const box = BABYLON.MeshBuilder.CreateBox("box", {});
     box.position.x = 2;
+    return box;
+}
+
+function createxSlide(frameRate){
     const xSlide = new BABYLON.Animation(
         "xSlide",
         "position.x",
@@ -11,7 +15,6 @@ function createBox(scene) {
         BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
     );
 
-
     const keyFramesX = [];
     keyFramesX.push({ frame: 0, value: 2 });
     keyFramesX.push({ frame: frameRate, value: -2 });
@@ -19,9 +22,7 @@ function createBox(scene) {
 
     xSlide.setKeys(keyFramesX);
 
-    box.animations.push(xSlide);
-
-    return box;
+    return xSlide
 }
 
 function createLight(scene) {
@@ -46,6 +47,8 @@ export default function createStartScene(engine) {
     //scene.debugLayer.show();
 
     let box = (that.box = createBox(scene));
+    box.animations.push(createxSlide(frameRate));
+
     let light = (that.light = createLight(scene));
     let camera = (that.camera = createArcRotateCamera(scene));
 
