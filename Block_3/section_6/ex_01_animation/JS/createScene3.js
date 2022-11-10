@@ -3,6 +3,10 @@ const frameRate = 30;
 function createBox(scene) {
     const box = BABYLON.MeshBuilder.CreateBox("box", {});
     box.position.x = 2;
+    return box;
+}
+
+function createxSlide(frameRate){
     const xSlide = new BABYLON.Animation(
         "xSlide",
         "position.x",
@@ -10,6 +14,18 @@ function createBox(scene) {
         BABYLON.Animation.ANIMATIONTYPE_FLOAT,
         BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
     );
+
+    const keyFramesX = [];
+    keyFramesX.push({ frame: 0, value: 2 });
+    keyFramesX.push({ frame: frameRate, value: -2 });
+    keyFramesX.push({ frame: 2 * frameRate, value: 2 });
+
+    xSlide.setKeys(keyFramesX);
+
+    return xSlide
+}
+
+function createySlide(frameRate){
     const ySlide = new BABYLON.Animation(
         "ySlide",
         "position.y",
@@ -17,25 +33,53 @@ function createBox(scene) {
         BABYLON.Animation.ANIMATIONTYPE_FLOAT,
         BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
     );
- 
-
-    const keyFramesX = [];
-    keyFramesX.push({ frame: 0, value: 2 });
-    keyFramesX.push({ frame: frameRate, value: -2 });
-    keyFramesX.push({ frame: 2 * frameRate, value: 2 });
 
     const keyFramesY = [];
     keyFramesY.push({ frame: 0, value: 2 });
     keyFramesY.push({ frame: frameRate, value: -2 });
     keyFramesY.push({ frame: 2 * frameRate, value: 2 });
 
-    xSlide.setKeys(keyFramesX);
     ySlide.setKeys(keyFramesY);
 
-    box.animations.push(xSlide);
-    box.animations.push(ySlide);
+    return ySlide
+}
 
-    return box;
+function createxRotate(frameRate){
+    const xRotation = new BABYLON.Animation(
+        "xRotation",
+        "rotation.x",
+        frameRate,
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    const keyFramesRX = [];
+    keyFramesRX.push({ frame: 0, value: 0 });
+    keyFramesRX.push({ frame: frameRate, value: Math.PI });
+    keyFramesRX.push({ frame: 2 * frameRate, value: Math.PI * 2 });
+
+    xRotation.setKeys(keyFramesRX);
+
+    return xRotation
+}
+
+function createyRotate(frameRate){
+    const yRotation = new BABYLON.Animation(
+        "yRotation",
+        "rotation.y",
+        frameRate,
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    const keyFramesRY = [];
+    keyFramesRY.push({ frame: 0, value: 0 });
+    keyFramesRY.push({ frame: 2 * frameRate, value: Math.PI });
+    keyFramesRY.push({ frame: 4 * frameRate, value: Math.PI * 2 });
+
+    yRotation.setKeys(keyFramesRY);
+
+    return yRotation
 }
 
 function createLight(scene) {
@@ -60,6 +104,11 @@ export default function createStartScene(engine) {
     //scene.debugLayer.show();
 
     let box = (that.box = createBox(scene));
+    box.animations.push(createxSlide(frameRate));
+    box.animations.push(createySlide(frameRate));
+    box.animations.push(createxRotate(frameRate));
+    box.animations.push(createyRotate(frameRate));
+
     let light = (that.light = createLight(scene));
     let camera = (that.camera = createArcRotateCamera(scene));
 

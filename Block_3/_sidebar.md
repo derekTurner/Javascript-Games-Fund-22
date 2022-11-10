@@ -7,7 +7,8 @@
 * [<h3>Setup Docker</h3>](Block_3/section_2/setup.md)
 * [<h3>Install babylonjs</h3>](Block_3/section_3/section_3.md)
 * [<h3>changing scenes</h3>](Block_3/section_4/section_4.md)
-* [<h3>village scenes</h3>](Block_3/section_5/section_5.md)
+* [<h3>Village scenes</h3>](Block_3/section_5/section_5.md)
+* [<h3>Frame Animation</h3>](Block_3/section_6/section_6.md)
 <!--
 * [<h3>Environments</h3>](Block_3/section_2/section_2.md)
 * [<h3>Player Movement and Interaction</h3>](Block_3/section_3/section_3.md)

@@ -25,6 +25,26 @@ function createxSlide(frameRate){
     return xSlide
 }
 
+function createySlide(frameRate){
+    const ySlide = new BABYLON.Animation(
+        "ySlide",
+        "position.y",
+        frameRate,
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    const keyFramesY = [];
+    keyFramesY.push({ frame: 0, value: 2 });
+    keyFramesY.push({ frame: frameRate, value: -2 });
+    keyFramesY.push({ frame: 2 * frameRate, value: 2 });
+
+    ySlide.setKeys(keyFramesY);
+
+    return ySlide
+}
+
+
 function createLight(scene) {
     const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     light.intensity = 0.7;
@@ -48,6 +68,7 @@ export default function createStartScene(engine) {
 
     let box = (that.box = createBox(scene));
     box.animations.push(createxSlide(frameRate));
+    box.animations.push(createySlide(frameRate));
 
     let light = (that.light = createLight(scene));
     let camera = (that.camera = createArcRotateCamera(scene));
