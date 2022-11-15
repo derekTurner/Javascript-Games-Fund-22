@@ -9,6 +9,7 @@ Just what's where in this block
 | S4  Scenes            | Switching between 2 scenes using HTML buttons                              |
 | S5  Village           | Following through the BabylonJS tutorial to create a village <br />  Ex01  clumsy starting could discard<br />Ex02   with roof in functional code        |
 | S6  | Frame based animation of position & rotation of a square - to refactor |
+| S7  | Importing Meshes |
 | Sx  | Keyboard control of box location |
 
 animation curve editor https://doc.babylonjs.com/toolsAndResources/inspector/animationCurveEditor 
