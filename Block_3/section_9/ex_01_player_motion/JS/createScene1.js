@@ -4,6 +4,7 @@ function importMesh(scene, x, y) {
     let item = BABYLON.SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, skeletons) {
         scene.onBeforeRenderObservable.add(()=> {
             let keydown = false;
+            //console.log('oh');
             let inputMap = {};
             if (inputMap["w"] || inputMap["ArrowUp"]) {
                 newMeshes[0].position.z += 0.1;
@@ -34,10 +35,16 @@ function importMesh(scene, x, y) {
 function actionManager(scene){
     scene.actionManager = new BABYLON.ActionManager(scene);
     let inputMap = {};
-    scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function(evt) {
-        inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
-    }));
-    console.log('scene.actionManager');
+    scene.actionManager.registerAction(
+        new BABYLON.ExecuteCodeAction(
+            {//trigger options
+            trigger: BABYLON.ActionManager.OnKeyDownTrigger, 
+            parameter: 'w'
+            },
+            function(evt) {inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";}
+        )
+    );
+   // console.log(scene.actionManager);
     return scene.actionManager;
 }
 
@@ -78,9 +85,9 @@ export default function createStartScene(engine) {
     let light = (that.light = createLight(scene));
     let camera = (that.camera = createArcRotateCamera(scene));
     let ground = (that.ground = createGround(scene));
-    console.log();
+    
     let manager = (that.actionManager = actionManager(scene));
-    console.log(manager);
+    //console.log(manager);
     let mesh1 = (that.mesh1 = importMesh(scene, 0, 0));
 
     let bgMusic = (that.bgMusic = backgroundMusic(scene));
