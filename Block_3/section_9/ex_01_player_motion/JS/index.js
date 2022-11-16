@@ -1,9 +1,8 @@
-import createScene1 from "./createScene1.js";
-/* 
-import createScene2 from "./createScene2.js";
+import createScene1  from "./createScene1.js";
+/*import createScene2 from "./createScene2.js";/*
 import createScene3 from "./createScene3.js";
-import createScene4 from "./createScene4.js";
-import createScene5 from "./createScene5.js";
+/*import createScene4 from "./createScene4.js";
+/*import createScene5 from "./createScene5.js";
 */
 
 const CanvasName = "renderCanvas";
@@ -43,19 +42,19 @@ function showScene(evt) {
 }
 
 document.getElementById("s1").addEventListener("click", showScene, { passive: true });
-/* document.getElementById("s2").addEventListener("click", showScene, { passive: true });
-document.getElementById("s3").addEventListener("click", showScene, { passive: true });
-document.getElementById("s4").addEventListener("click", showScene, { passive: true });
-document.getElementById("s5").addEventListener("click", showScene, { passive: true });
+/*document.getElementById("s2").addEventListener("click", showScene, { passive: true });
+/* document.getElementById("s3").addEventListener("click", showScene, { passive: true });
+/*document.getElementById("s4").addEventListener("click", showScene, { passive: true });
+/*document.getElementById("s5").addEventListener("click", showScene, { passive: true });
 */
 
 // Start engine and render
 let eng = new BABYLON.Engine(canvas, true, null, true);
 scenes_arr.push(createScene1(eng));
-/* scenes_arr.push(createScene2(eng));
-scenes_arr.push(createScene3(eng));
-scenes_arr.push(createScene4(eng));
-scenes_arr.push(createScene5(eng));
+/*scenes_arr.push(createScene2(eng));
+/*scenes_arr.push(createScene3(eng));
+/*scenes_arr.push(createScene4(eng));
+/*scenes_arr.push(createScene5(eng));
 */
 
 let scene = scenes_arr[0].scene;

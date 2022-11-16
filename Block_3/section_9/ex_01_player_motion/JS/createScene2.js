@@ -1,7 +1,6 @@
 var keyDownMap =[];
 
 function importMesh(scene, x, y) {
-    let meshes = {};
     let item = BABYLON.SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, skeletons) {
         let mesh = newMeshes[0];
         scene.onBeforeRenderObservable.add(()=> {
@@ -23,7 +22,27 @@ function importMesh(scene, x, y) {
             }
         });
     });
-    
+    console.log('here');
+/*
+    item.actionManager = new BABYLON.ActionManager(scene);
+        var tempItem = { flag: false }
+        item.actionManager.registerAction(
+            new BABYLON.SetValueAction(
+                BABYLON.ActionManager.OnPickOverTrigger,
+                tempItem,
+                'flag',
+                true
+            )
+        )
+        item.actionManager.registerAction(
+            new BABYLON.SetValueAction(
+                BABYLON.ActionManager.OnPickOutTrigger,
+                tempItem,
+                'flag',
+                false
+            )
+        )
+*/
 
     return item
 }    
@@ -40,6 +59,7 @@ function actionManager(scene){
             function(evt) {keyDownMap[evt.sourceEvent.key] = true; }
         )
     );
+
     scene.actionManager.registerAction(
         new BABYLON.ExecuteCodeAction(
             {
@@ -48,9 +68,29 @@ function actionManager(scene){
             },
             function(evt) {keyDownMap[evt.sourceEvent.key] = false; }
         )
-    );
+    );   
+
+
     return scene.actionManager;
 }
+
+function addRotation(target, scene){
+
+ /*   scene.actionManager.registerAction(
+        new BABYLON.IncrementValueAction(
+            BABYLON.ActionManager.OnEveryFrameTrigger,
+            target,
+            'rotation.y',
+            0.1,
+            new BABYLON.PredicateCondition(
+                target.actionManager,
+                function () {
+                    return tempItem.flag == true
+                }
+            )
+        )
+    );  */
+} 
 
 function backgroundMusic(scene){
     let music = new BABYLON.Sound("music", "./assets/audio/arcade-kid.mp3", scene, null, {
@@ -92,6 +132,7 @@ export default function createStartScene(engine) {
     
     let manager = (that.actionManager = actionManager(scene));
     let mesh1 = (that.mesh1 = importMesh(scene, 0, 0));
+    addRotation(mesh1, scene);
 
     let bgMusic = (that.bgMusic = backgroundMusic(scene));
     
