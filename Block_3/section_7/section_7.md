@@ -185,7 +185,7 @@ Button 1 illustrates the loaded meshes statically placed.
     height="460" 
     width="100%" 
     scrolling="no" 
-    title="frame animaations" 
+    title="Mesh animation" 
     src="Block_3/section_7/ex_01_import_mesh/index.html" 
     frameborder="no" 
     loading="lazy" 
