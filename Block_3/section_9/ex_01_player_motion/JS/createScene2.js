@@ -1,6 +1,7 @@
 var keyDownMap =[];
 
 function importMesh(scene, x, y) {
+    let tempItem = { flag: false }
     let item = BABYLON.SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, skeletons) {
         let mesh = newMeshes[0];
         scene.onBeforeRenderObservable.add(()=> {
@@ -21,28 +22,44 @@ function importMesh(scene, x, y) {
                 mesh.rotation.y = Math.PI / 2;
             }
         });
-    });
-    console.log('here');
-/*
-    item.actionManager = new BABYLON.ActionManager(scene);
-        var tempItem = { flag: false }
-        item.actionManager.registerAction(
+
+        scene.actionManager.registerAction(
+            new BABYLON.IncrementValueAction(
+                BABYLON.ActionManager.OnEveryFrameTrigger,
+                mesh,
+                'rotation.y',
+                0.1,
+                new BABYLON.PredicateCondition(
+                    mesh.actionManager,
+                    function () {
+                        return tempItem.flag == true
+                    }
+                )
+            )
+        ); 
+
+        mesh.actionManager = new BABYLON.ActionManager(scene);
+    
+    
+        mesh.actionManager.registerAction(
             new BABYLON.SetValueAction(
-                BABYLON.ActionManager.OnPickOverTrigger,
+                BABYLON.ActionManager.OnPickDownTrigger,
                 tempItem,
                 'flag',
                 true
             )
-        )
-        item.actionManager.registerAction(
+        );
+        
+        mesh.actionManager.registerAction(
             new BABYLON.SetValueAction(
-                BABYLON.ActionManager.OnPickOutTrigger,
+                BABYLON.ActionManager.OnLongPressTrigger,
                 tempItem,
                 'flag',
                 false
             )
-        )
-*/
+        ); 
+
+    });
 
     return item
 }    
@@ -76,20 +93,7 @@ function actionManager(scene){
 
 function addRotation(target, scene){
 
- /*   scene.actionManager.registerAction(
-        new BABYLON.IncrementValueAction(
-            BABYLON.ActionManager.OnEveryFrameTrigger,
-            target,
-            'rotation.y',
-            0.1,
-            new BABYLON.PredicateCondition(
-                target.actionManager,
-                function () {
-                    return tempItem.flag == true
-                }
-            )
-        )
-    );  */
+ /*    */
 } 
 
 function backgroundMusic(scene){
