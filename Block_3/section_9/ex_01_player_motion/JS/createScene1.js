@@ -1,8 +1,7 @@
 var keyDownMap =[];
 
 function importMesh(scene, x, y) {
-    let meshes = {};
-    let item = BABYLON.SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes, skeletons) {
+    let item = BABYLON.SceneLoader.ImportMesh("", "./assets/models/", "dummy3.babylon", scene, function(newMeshes) {
         let mesh = newMeshes[0];
         scene.onBeforeRenderObservable.add(()=> {
             if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
@@ -23,8 +22,6 @@ function importMesh(scene, x, y) {
             }
         });
     });
-    
-
     return item
 }    
     
@@ -89,12 +86,9 @@ export default function createStartScene(engine) {
     let light = (that.light = createLight(scene));
     let camera = (that.camera = createArcRotateCamera(scene));
     let ground = (that.ground = createGround(scene));
-    
     let manager = (that.actionManager = actionManager(scene));
-    let mesh1 = (that.mesh1 = importMesh(scene, 0, 0));
-
+    let mesh1   = (that.mesh1 = importMesh(scene, 0, 0));
     let bgMusic = (that.bgMusic = backgroundMusic(scene));
-    
     
     return that;
 }
