@@ -160,7 +160,7 @@ This will appear on the browser as:
 The result is that the character can be moved by the usual keys.  Try pressing "w" and "a" for diagonal motion.
 
 <iframe 
-    height="460" 
+    height="560" 
     width="100%" 
     scrolling="no" 
     title="Gui scenes selector" 
