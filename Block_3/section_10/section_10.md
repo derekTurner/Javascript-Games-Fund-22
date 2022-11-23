@@ -146,9 +146,9 @@ export default function guiScene(engine) {
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI",true);
 
-    var button1 = createSceneButton("but1", 1,"-100px", "200px", advancedTexture);
-    var button2 = createSceneButton("but2", 2,"000px", "200px", advancedTexture);
-    var button3 = createSceneButton("but3", 3,"100px", "200px", advancedTexture);
+    var button1 = createSceneButton("but1", 1,"-100px", "120px", advancedTexture);
+    var button2 = createSceneButton("but2", 2,"000px", "120px", advancedTexture);
+    var button3 = createSceneButton("but3", 3,"100px", "120px", advancedTexture);
      
     //guiScene.debugLayer.show();
     return guiScene;
@@ -160,7 +160,7 @@ This will appear on the browser as:
 The result is that the character can be moved by the usual keys.  Try pressing "w" and "a" for diagonal motion.
 
 <iframe 
-    height="560" 
+    height="350" 
     width="100%" 
     scrolling="no" 
     title="Gui scenes selector" 
@@ -171,4 +171,3 @@ The result is that the character can be moved by the usual keys.  Try pressing "
     allowfullscreen="true">
 </iframe>
 
-The gui does not show up when embedded in these notes, but will in a web page.

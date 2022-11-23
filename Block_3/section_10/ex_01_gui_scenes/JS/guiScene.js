@@ -23,9 +23,9 @@ export default function guiScene(engine) {
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("myUI",true);
 
-    var button1 = createSceneButton("but1", 1,"-100px", "200px", advancedTexture);
-    var button2 = createSceneButton("but2", 2,"000px", "200px", advancedTexture);
-    var button3 = createSceneButton("but3", 3,"100px", "200px", advancedTexture);
+    var button1 = createSceneButton("but1", 1,"-100px", "120px", advancedTexture);
+    var button2 = createSceneButton("but2", 2,"000px", "120px", advancedTexture);
+    var button3 = createSceneButton("but3", 3,"100px", "120px", advancedTexture);
      
     //guiScene.debugLayer.show();
     return guiScene;
