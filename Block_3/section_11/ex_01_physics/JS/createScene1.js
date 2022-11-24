@@ -87,10 +87,18 @@ function importMesh(scene, x, y) {
                 false
             )
         ); 
+        // add collider
+        // https://playground.babylonjs.com/#FD65RR
 
+        var physicsRoot = new BABYLON.Mesh("", scene);
+        //physicsRoot.scaling = 1;  
+        //physicsRoot.position.y = 0.9;        
+        //physicsRoot = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.1, friction: 1, restitution: 0.7 }, scene);
+        physicsRoot.addChild(mesh);  
+        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.1 }, scene);  
     });
 
-    return item
+    return item;
 }    
     
 function actionManager(scene){
@@ -121,9 +129,11 @@ function actionManager(scene){
 }
 
 
-function createBox(scene){
+function createBox(scene, x, y, z){
     let box = BABYLON.MeshBuilder.CreateBox("box", scene);
-    box.position.y = 3;
+    box.position.x = x;
+    box.position.y = y;
+    box.position.z = z;
     new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 100, restitution: 0.9 }, scene);
     return box;
 }
@@ -143,6 +153,7 @@ function backgroundMusic(scene){
 
 function createGround(scene){
     const ground = BABYLON.MeshBuilder.CreateGround("ground", {height: 10, width: 10, subdivisions: 4});
+    ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.7 }, scene);
     return ground;
 }
 
@@ -174,9 +185,9 @@ export default function createStartScene(engine) {
     let camera = (that.camera = createArcRotateCamera(scene));
     let ground = (that.ground = createGround(scene));
 
-    let box = (that.box = createBox(scene))
+    let box = (that.box = createBox(scene,2,2,2));
     let manager = (that.actionManager = actionManager(scene));
-    let mesh1 = (that.mesh1 = importMesh(scene, 0, 0));
+    let mesh1 = (that.mesh1 = importMesh(scene, 100, 100));
     addRotation(mesh1, scene);
 
     let bgMusic = (that.bgMusic = backgroundMusic(scene));
