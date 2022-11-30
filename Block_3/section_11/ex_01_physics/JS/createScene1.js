@@ -17,51 +17,54 @@ function importMesh(scene, x, y) {
         //var idleRange = skeleton.getAnimationRange("YBot_Idle");
         var animating = false;
 
-        // add colliders
+        // add colliders on the ground
          var collidersVisible = true;
-         var boxCollider = BABYLON.Mesh.CreateBox("box1", 1, scene);
-         boxCollider.scaling.y = 2;
-         boxCollider.position.x = 0;
-         boxCollider.position.y = 0;
-         boxCollider.position.z = 0;
+         var meshCollider = BABYLON.Mesh.CreateCapsule("ribbon", {height:1, radius:0.6}, scene);
+         var scale = new BABYLON.Vector3(1.5,2,1);
+         meshCollider.scaling.x = scale.x;
+         meshCollider.scaling.y = scale.y;
+         meshCollider.scaling.z = scale.z;
+         meshCollider.position.y = ( scale.y)/2;
          
-         boxCollider.isVisible = collidersVisible;
+         meshCollider.isVisible = collidersVisible;
 
          // https://playground.babylonjs.com/#FD65RR
         // Create a physics root and add all children 
-        var physicsRoot = new BABYLON.Mesh("", scene);
+        let physicsRoot = new BABYLON.Mesh("", scene);
         physicsRoot.position.x = 0.0;     
         physicsRoot.position.y = 0.0;    
         physicsRoot.position.z = 0.0;         
         physicsRoot.addChild(mesh);  
-        physicsRoot.addChild(boxCollider);
-        //Enable physics on colliders first then physics root of the mesh
-        boxCollider.physicsImpostor = new BABYLON.PhysicsImpostor(boxCollider, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
-        physicsRoot.physicsImpostor = new BABYLON.PhysicsImpostor(physicsRoot, BABYLON.PhysicsImpostor.NoImpostor, { mass: 3 }, scene);
+        physicsRoot.addChild(meshCollider);
+//physica root needs quaternion rotation
 
+        //Enable physics on colliders first then physics root of the mesh
+        meshCollider.physicsImpostor = new BABYLON.PhysicsImpostor(meshCollider, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
+        physicsRoot.physicsImpostor = new BABYLON.PhysicsImpostor(physicsRoot, BABYLON.PhysicsImpostor.NoImpostor, { mass: 3 }, scene);
+  
         scene.onBeforeRenderObservable.add(()=> {
             var keydown = false;
-            if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
+            if (keyDownMap["w"] ) {
                 physicsRoot.position.z += 0.1;
-                physicsRoot.rotation.y = 0;
+                mesh.rotation.y = 0;
                 keydown=true;
             }
-            if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
+            if (keyDownMap["a"] ) {
                 physicsRoot.position.x -= 0.1;
-                physicsRoot.rotation.y = 3 * Math.PI / 2;
+                mesh.rotation.y = 3 * Math.PI / 2;
                 keydown=true;
             }
-            if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
+            if (keyDownMap["s"] ) {
                 physicsRoot.position.z -= 0.1;
-                physicsRoot.rotation.y = 2 * Math.PI / 2;
+                mesh.rotation.y = 2 * Math.PI / 2;
                 keydown=true;
             }
-            if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
+            if (keyDownMap["d"] ) {
                 physicsRoot.position.x += 0.1;
-                physicsRoot.rotation.y = Math.PI / 2;
+                mesh.rotation.y = Math.PI / 2;
                 keydown=true;
             }
-
+  
             if(keydown){
                 if(!animating){
                     animating = true;
@@ -72,12 +75,11 @@ function importMesh(scene, x, y) {
                 scene.stopAnimation(skeleton)
             }
         });
-
         scene.actionManager.registerAction(
             new BABYLON.IncrementValueAction(
                 BABYLON.ActionManager.OnEveryFrameTrigger,
                 physicsRoot,
-                'physicsRoot.y',
+                'rotation.y',
                 0.1,
                 new BABYLON.PredicateCondition(
                     mesh.actionManager,
@@ -87,6 +89,7 @@ function importMesh(scene, x, y) {
                 )
             )
         ); 
+
 
         mesh.actionManager = new BABYLON.ActionManager(scene);
     
@@ -148,7 +151,7 @@ function createBox(scene, x, y, z){
     box.position.x = x;
     box.position.y = y;
     box.position.z = z;
-    new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 100, restitution: 0.9 }, scene);
+    new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 10, restitution: 0.9 }, scene);
     return box;
 }
 
@@ -183,7 +186,7 @@ function createArcRotateCamera(scene) {
     let camDist = 15;
     let camTarget = new BABYLON.Vector3(0, 0, 0);
     let camera = new BABYLON.ArcRotateCamera("camera1", camAlpha, camBeta, camDist, camTarget, scene);
-    //camera.attachControl(true);
+    camera.attachControl(true);
     return camera;
 }
 
