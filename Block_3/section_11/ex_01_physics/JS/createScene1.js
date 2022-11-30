@@ -1,4 +1,5 @@
-var keyDownMap =[];
+import { compassKey, compass } from "./utility.JS";
+       
 
 function importMesh(scene, x, y) {
     let tempItem = { flag: false }
@@ -18,7 +19,7 @@ function importMesh(scene, x, y) {
         var animating = false;
 
         // add colliders on the ground
-         var collidersVisible = true;
+         var collidersVisible = false;
          var meshCollider = BABYLON.Mesh.CreateCapsule("ribbon", {height:1, radius:0.6}, scene);
          var scale = new BABYLON.Vector3(1.5,2,1);
          meshCollider.scaling.x = scale.x;
@@ -28,7 +29,6 @@ function importMesh(scene, x, y) {
          
          meshCollider.isVisible = collidersVisible;
 
-         // https://playground.babylonjs.com/#FD65RR
         // Create a physics root and add all children 
         let physicsRoot = new BABYLON.Mesh("", scene);
         physicsRoot.position.x = 0.0;     
@@ -36,35 +36,18 @@ function importMesh(scene, x, y) {
         physicsRoot.position.z = 0.0;         
         physicsRoot.addChild(mesh);  
         physicsRoot.addChild(meshCollider);
-//physica root needs quaternion rotation
+
 
         //Enable physics on colliders first then physics root of the mesh
         meshCollider.physicsImpostor = new BABYLON.PhysicsImpostor(meshCollider, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
         physicsRoot.physicsImpostor = new BABYLON.PhysicsImpostor(physicsRoot, BABYLON.PhysicsImpostor.NoImpostor, { mass: 3 }, scene);
   
+
+
         scene.onBeforeRenderObservable.add(()=> {
-            var keydown = false;
-            if (keyDownMap["w"] ) {
-                physicsRoot.position.z += 0.1;
-                mesh.rotation.y = 0;
-                keydown=true;
-            }
-            if (keyDownMap["a"] ) {
-                physicsRoot.position.x -= 0.1;
-                mesh.rotation.y = 3 * Math.PI / 2;
-                keydown=true;
-            }
-            if (keyDownMap["s"] ) {
-                physicsRoot.position.z -= 0.1;
-                mesh.rotation.y = 2 * Math.PI / 2;
-                keydown=true;
-            }
-            if (keyDownMap["d"] ) {
-                physicsRoot.position.x += 0.1;
-                mesh.rotation.y = Math.PI / 2;
-                keydown=true;
-            }
-  
+
+            var keydown = compass(physicsRoot);
+ 
             if(keydown){
                 if(!animating){
                     animating = true;
@@ -75,6 +58,7 @@ function importMesh(scene, x, y) {
                 scene.stopAnimation(skeleton)
             }
         });
+
         scene.actionManager.registerAction(
             new BABYLON.IncrementValueAction(
                 BABYLON.ActionManager.OnEveryFrameTrigger,
@@ -90,9 +74,7 @@ function importMesh(scene, x, y) {
             )
         ); 
 
-
         mesh.actionManager = new BABYLON.ActionManager(scene);
-    
     
         mesh.actionManager.registerAction(
             new BABYLON.SetValueAction(
@@ -110,9 +92,7 @@ function importMesh(scene, x, y) {
                 'flag',
                 false
             )
-        ); 
-       
-        
+        );      
     });
 
     return item;
@@ -127,7 +107,7 @@ function actionManager(scene){
             trigger: BABYLON.ActionManager.OnKeyDownTrigger,
             //parameters: 'w'      
             },
-            function(evt) {keyDownMap[evt.sourceEvent.key] = true; }
+            function(evt) {compassKey(evt.sourceEvent.key,true); }
         )
     );
 
@@ -137,7 +117,7 @@ function actionManager(scene){
             trigger: BABYLON.ActionManager.OnKeyUpTrigger
             
             },
-            function(evt) {keyDownMap[evt.sourceEvent.key] = false; }
+            function(evt) {compassKey(evt.sourceEvent.key,false); }
         )
     );   
 
@@ -155,10 +135,6 @@ function createBox(scene, x, y, z){
     return box;
 }
 
-function addRotation(target, scene){
-
-    /*    */
-} 
 
 function backgroundMusic(scene){
     let music = new BABYLON.Sound("music", "./assets/audio/arcade-kid.mp3", scene, null, {
@@ -205,7 +181,6 @@ export default function createStartScene(engine) {
     let box = (that.box = createBox(scene,2,2,2));
     let manager = (that.actionManager = actionManager(scene));
     let mesh1 = (that.mesh1 = importMesh(scene, 100, 100));
-    addRotation(mesh1, scene);
 
     let bgMusic = (that.bgMusic = backgroundMusic(scene));
     
