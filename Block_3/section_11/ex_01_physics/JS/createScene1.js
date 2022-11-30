@@ -1,4 +1,3 @@
-// references https://www.babylonjs-playground.com/#15EY4F#15
 var keyDownMap =[];
 
 function importMesh(scene, x, y) {
@@ -18,26 +17,48 @@ function importMesh(scene, x, y) {
         //var idleRange = skeleton.getAnimationRange("YBot_Idle");
         var animating = false;
 
+        // add colliders
+         var collidersVisible = true;
+         var boxCollider = BABYLON.Mesh.CreateBox("box1", 1, scene);
+         boxCollider.scaling.y = 2;
+         boxCollider.position.x = 0;
+         boxCollider.position.y = 0;
+         boxCollider.position.z = 0;
+         
+         boxCollider.isVisible = collidersVisible;
+
+         // https://playground.babylonjs.com/#FD65RR
+        // Create a physics root and add all children 
+        var physicsRoot = new BABYLON.Mesh("", scene);
+        physicsRoot.position.x = 0.0;     
+        physicsRoot.position.y = 0.0;    
+        physicsRoot.position.z = 0.0;         
+        physicsRoot.addChild(mesh);  
+        physicsRoot.addChild(boxCollider);
+        //Enable physics on colliders first then physics root of the mesh
+        boxCollider.physicsImpostor = new BABYLON.PhysicsImpostor(boxCollider, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
+        physicsRoot.physicsImpostor = new BABYLON.PhysicsImpostor(physicsRoot, BABYLON.PhysicsImpostor.NoImpostor, { mass: 3 }, scene);
+
         scene.onBeforeRenderObservable.add(()=> {
             var keydown = false;
             if (keyDownMap["w"] || keyDownMap["ArrowUp"]) {
-                mesh.position.z += 0.1;
-                mesh.rotation.y = 0;
+                physicsRoot.position.z += 0.1;
+                physicsRoot.rotation.y = 0;
                 keydown=true;
             }
             if (keyDownMap["a"] || keyDownMap["ArrowLeft"]) {
-                mesh.position.x -= 0.1;
-                mesh.rotation.y = 3 * Math.PI / 2;
+                physicsRoot.position.x -= 0.1;
+                physicsRoot.rotation.y = 3 * Math.PI / 2;
                 keydown=true;
             }
             if (keyDownMap["s"] || keyDownMap["ArrowDown"]) {
-                mesh.position.z -= 0.1;
-                mesh.rotation.y = 2 * Math.PI / 2;
+                physicsRoot.position.z -= 0.1;
+                physicsRoot.rotation.y = 2 * Math.PI / 2;
                 keydown=true;
             }
             if (keyDownMap["d"] || keyDownMap["ArrowRight"]) {
-                mesh.position.x += 0.1;
-                mesh.rotation.y = Math.PI / 2;
+                physicsRoot.position.x += 0.1;
+                physicsRoot.rotation.y = Math.PI / 2;
                 keydown=true;
             }
 
@@ -55,8 +76,8 @@ function importMesh(scene, x, y) {
         scene.actionManager.registerAction(
             new BABYLON.IncrementValueAction(
                 BABYLON.ActionManager.OnEveryFrameTrigger,
-                mesh,
-                'rotation.y',
+                physicsRoot,
+                'physicsRoot.y',
                 0.1,
                 new BABYLON.PredicateCondition(
                     mesh.actionManager,
@@ -87,15 +108,8 @@ function importMesh(scene, x, y) {
                 false
             )
         ); 
-        // add collider
-        // https://playground.babylonjs.com/#FD65RR
-
-        var physicsRoot = new BABYLON.Mesh("", scene);
-        //physicsRoot.scaling = 1;  
-        //physicsRoot.position.y = 0.9;        
-        //physicsRoot = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.1, friction: 1, restitution: 0.7 }, scene);
-        physicsRoot.addChild(mesh);  
-        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0.1 }, scene);  
+       
+        
     });
 
     return item;
