@@ -11,6 +11,7 @@
 * [<h3>Mesh Animation</h3>](Block_3/section_7/section_7.md)
 * [<h3>Mesh Movement</h3>](Block_3/section_9/section_9.md)
 * [<h3>Gui scene selector</h3>](Block_3/section_10/section_10.md)
+* [<h3>Mesh physics</h3>](Block_3/section_11/section_11.md)
 <!--
 * [<h3>Environments</h3>](Block_3/section_2/section_2.md)
 * [<h3>Player Movement and Interaction</h3>](Block_3/section_3/section_3.md)
