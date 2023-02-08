@@ -80,10 +80,10 @@ Selectors are needed to determine what is to be affected by the style in the cas
 |div.class      | `<div>` element with class =  "class"|
 |#unique        | Element with id "unique" |
 |div#itemid     |`<div>` with id "itemid" |
-|a[attr]        |<a> with attribute "attr"|
-|a[attr='x']    | <a> when "attr" is "x" |
-|a[class~='x']  |<a> when class is a list containing 'x'|
-|a[lang='en']  |<a> when lang begins "en" |
+|a[attr]        |`<a>` with attribute "attr"|
+|a[attr='x']    | `<a>` when "attr" is "x" |
+|a[class~='x']  |`<a>` when class is a list containing 'x'|
+|a[lang='en']  |`<a>` when lang begins "en" |
 
 Example
 
