@@ -1,6 +1,6 @@
 import createStartScene from "./createStartScene.js";
 
-const CanvasName = "index-canvas";
+const CanvasName = "renderCanvas";
 
 let canvas = document.createElement("canvas");
 canvas.id = CanvasName;
