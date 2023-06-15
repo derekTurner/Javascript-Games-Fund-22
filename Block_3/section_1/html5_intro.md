@@ -268,11 +268,11 @@ An async function is defined and referenced by the asyncEngineCreation variable.
         }
     };
 ```
-.When window,initfunction is called it will fo on to execute the function referenced as asyncEngineCreation. The resulte is `await`ed and the returned default engine is refferenced by window.engine.
+.When window,initfunction is called it will fo on to execute the function referenced as asyncEngineCreation. The resulte is `await`ed and the returned default engine is referenced by window.engine.
 
 If an engine has not been created an error message is thrown.
 
-Npw the render loop can be started acting on the returned engine and the canvas.
+Now the render loop can be started acting on the returned engine and the canvas.
 
 Finally the scene returned by createScene is displayed as the window.scene.
 
